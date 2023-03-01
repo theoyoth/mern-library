@@ -8,7 +8,7 @@ import connectDB from "./db.js";
 
 const app = express();
 
-app.use(cors({origin:["http://127.0.0.1:5173","https://booklibrary.com"]}));
+app.use(cors({origin:["http://127.0.0.1:5173","https://booklibrary.vercel.app"]}));
 
 app.use(express.json());
 connectDB();
