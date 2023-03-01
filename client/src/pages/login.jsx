@@ -11,6 +11,8 @@ function Loginpage() {
     const signIn = useSignIn()
     const isAuthenticated = useIsAuthenticated()
 
+    const redirectUrl = "https://booklibraryapp.vercel.app" || "http://127.0.0.1:5173";
+
     const schema = Yup.object().shape({
         name: Yup.string().required('Name is required'),
         password: Yup.string().required('Password is required'),
@@ -30,7 +32,7 @@ function Loginpage() {
                         authState: {name:user.data.name},
                     })
                 if(saveToken){
-                    window.location.href = "http://127.0.0.1:5173";
+                    window.location.href = redirectUrl
                 }     
                     
             } else{
