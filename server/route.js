@@ -3,6 +3,11 @@ import {getAllBooks,getBookbyId,postNewBook,updateBook,deleteBook,registerUser,l
 
 const router = express.Router();
 
+// 
+router.get('/', (req,res) => {
+    res.json({success:true,msg:"you are in mern library"});
+});
+
 // authentication
 router.post('/login', loginUser);
 router.post('/register', registerUser);
