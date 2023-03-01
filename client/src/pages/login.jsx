@@ -20,7 +20,7 @@ function Loginpage() {
         setErrormsg("")
 
         try {
-            const user = await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/login`,values)
+            const user = await axios.post(`${import.meta.env.VITE_BASE_URL}/login`,values)
             if(user.data?.success){
                 const saveToken = signIn(
                     {

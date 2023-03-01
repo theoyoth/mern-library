@@ -22,7 +22,7 @@ function RegisterUser() {
         setMsg("")
 
         try {
-            const regisUser = await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/register`,values)
+            const regisUser = await axios.post(`${import.meta.env.VITE_BASE_URL}/register`,values)
             if(regisUser.data.success){
                 setMsg(regisUser.data.msg)
                 setTimeout(()=>{

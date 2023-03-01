@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const fetchAllBooks = (setBooks) => {
     const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
+    axios.get(`${import.meta.env.VITE_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
         if(res?.data?.success){
             setBooks(res?.data?.data)
             return source.cancel()
@@ -14,7 +14,7 @@ export const fetchAllBooks = (setBooks) => {
     })
 }
 export const deleteBookById = async (id) => {
-    const res = await axios.delete(`${import.meta.env.VITE_LOCAL_BASE_URL}/book/${id}`)
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/book/${id}`)
     if(res.data?.success){
         return res?.data
     }else{
@@ -26,7 +26,7 @@ export const deleteBookById = async (id) => {
 
 export const onUpdate = async (id,values) => {
     try {
-        const postBook = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/book/${id}`,values)
+        const postBook = await axios.put(`${import.meta.env.VITE_BASE_URL}/book/${id}`,values)
         if(postBook.data?.success){
           return postBook?.data
         } else{
@@ -39,7 +39,7 @@ export const onUpdate = async (id,values) => {
 
 export const getBookbyId = async (id,setBook) => {
     const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/book/${id}`,{ cancelToken: source.token})
+    axios.get(`${import.meta.env.VITE_BASE_URL}/book/${id}`,{ cancelToken: source.token})
     .then(res => {
         setBook({title: res.data?.data?.title, author: res.data?.data?.author, genre: res.data?.data?.genre.toString(), information: res.data?.data?.information})
         return source.cancel();

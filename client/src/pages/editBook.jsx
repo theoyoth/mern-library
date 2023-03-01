@@ -25,7 +25,7 @@ const editBook = () => {
     // get book by id
     useEffect(() => {     
       const source = axios.CancelToken.source();
-      axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/book/${params.id}`,{ cancelToken: source.token})
+      axios.get(`${import.meta.env.VITE_BASE_URL}/book/${params.id}`,{ cancelToken: source.token})
       .then(res => {
           setBook({title: res.data?.data?.title, author: res.data?.data?.author, genre: res.data?.data?.genre.toString(),status:res.data?.data?.status, information: res.data?.data?.information,summary: res.data?.data?.summary})
           return source.cancel();

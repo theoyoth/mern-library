@@ -17,7 +17,7 @@ const book = () => {
   // fetch all books from Database
   useEffect(() => {
     const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
+    axios.get(`${import.meta.env.VITE_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
       if(res?.data?.success){
         setBooks(res?.data?.data)
       }

@@ -10,7 +10,7 @@ const bookDetail = () => {
 
     useEffect(() => {
         const source = axios.CancelToken.source();
-        axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/book/${params.id}`,{ cancelToken: source.token}).then(res => {
+        axios.get(`${import.meta.env.VITE_BASE_URL}/book/${params.id}`,{ cancelToken: source.token}).then(res => {
             setBook(res.data.data)
         }).catch(err => {
         if(axios.isCancel(err)) {
