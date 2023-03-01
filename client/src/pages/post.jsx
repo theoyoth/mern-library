@@ -13,7 +13,7 @@ const Post = () => {
 
   const onSubmit = async (values) => {
     try {
-        const postBook = await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/book`,values)
+        const postBook = await axios.post(`${import.meta.env.VITE_BASE_URL}/book`,values)
         if(postBook.data?.success){
           ToastSuccess(postBook.data?.msg)
           navigate("/book")
