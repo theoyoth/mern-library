@@ -17,8 +17,6 @@ function Loginpage() {
         let redirectUrl = "https://booklibraryapp.vercel"
     }
 
-    console.log(process.env.NODE_ENV)
-
     const schema = Yup.object().shape({
         name: Yup.string().required('Name is required'),
         password: Yup.string().required('Password is required'),
