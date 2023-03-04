@@ -75,7 +75,7 @@ const book = () => {
             </div>
             <div className='flex gap-2 items-center mb-2'>
               <span><BiUser/></span>
-              <p className='text-lg'>{book.author}</p>
+              <p className='text-sm'>{book.author}</p>
             </div>
             <div className='flex gap-2'>
                 <button aria-label="button delete function" className='px-3 py-2 bg-red-600 transition-all ease-in-out duration-200 hover:bg-red-700 flex items-center' onClick={() => deleteBook(book._id)}>
