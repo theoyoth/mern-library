@@ -54,10 +54,10 @@ function RegisterUser() {
       }},[isAuthenticated])
   return (
     <section>
-        <div className='w-full grid place-items-center'>
+        <div className='w-full grid place-items-center relative'>
         <img src="/img/icon.webp" alt="logo aplikasi" className='rounded-full w-[80px] h-[80px] shadow-md mt-4 border-4 border-softwhite'/>
             <h1 className='text-3xl text-[#d2d2d2] font-bold mt-2 mb-4'>Register</h1>
-            <form onSubmit={formik.handleSubmit} className='w-[300px] lg:w-1/2'>
+            <form onSubmit={formik.handleSubmit} className='sm:w-1/2'>
                 <div className="mb-2">
                     <label htmlFor="name" className='block text-sm font-medium'>Name</label>
                     <input
@@ -65,7 +65,7 @@ function RegisterUser() {
                         name="name"
                         type="text"
                         onChange={formik.handleChange}
-                        value={formik.values.name} className='mt-1 block w-full border-gray-200 shadow-sm text-black px-4 py-2 focus:outline-none focus:border-softblack focus:ring-4 focus:ring-softblack'
+                        value={formik.values.name} className='mt-1 block w-full shadow-sm text-black px-4 py-2 focus:outline-none focus:border-softblack focus:ring-4 focus:ring-softblack'
                     />
                     {formik.errors.name && formik.touched.name && (
                         <span className="error text-xs text-red-500">{formik.errors.name}</span>
