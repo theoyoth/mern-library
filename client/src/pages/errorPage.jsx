@@ -13,7 +13,7 @@ const errorPage = () => {
             </p>
         </div>
         <div className="flex justify-center mt-4">
-            <Link to="/" className='px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-600 transition-all ease-in-out duration-200'>Back to home</Link>
+            <Link to="/" className='px-3 py-2 bg-softwhite border-4 border-softblack hover:bg-blue-600 transition-all ease-in-out duration-200'>Back to home</Link>
         </div>
       </div>
     );
