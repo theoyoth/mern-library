@@ -8,7 +8,7 @@ import connectDB from "./db.js";
 
 const app = express();
 
-app.use(cors({origin:['https://booklibraryapp.vercel.app','http:127.0.0.1/5173','https://mern-library-api.vercel.app','http:localhost:3000']}));
+app.use(cors({origin:['https://booklibraryapp.vercel.app','http://127.0.0.1:5173','https://mern-library-api.vercel.app','http://localhost:3000']}));
 
 app.use(express.json());
 app.use(route);

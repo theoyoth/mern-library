@@ -40,10 +40,10 @@ export const loginUser = async (req,res) => {
                 'Access-Control-Allow-Headers',
                 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
             )
-            res.status(200).json({success:true,name:findUser.name,token});
+            return res.status(200).json({success:true,name:findUser.name,token});
         }
         else{
-            res.json({success:false,msg:"User not found, please register!"});
+            return res.json({success:false,msg:"User not found, please register!"});
         }
         
     } catch (error) {
