@@ -1,9 +1,15 @@
+// import formik
 import {useFormik} from "formik";
-import axios from "axios";
+// import rrd
 import { useNavigate } from "react-router-dom";
+// import react-query
+import { useMutation} from "react-query";
 
+// import component
 import Title from "../components/TitlePage";
+// import helper
 import {configYup,configSwalToast} from "../lib"
+import { postBook } from "../api";
 
 const Post = () => {
   const navigate = useNavigate();
@@ -11,19 +17,8 @@ const Post = () => {
   const {ToastSuccess,ToastError} = configSwalToast()
   const schema = configYup()
 
-  const onSubmit = async (values) => {
-    try {
-        const postBook = await axios.post(`${import.meta.env.VITE_BASE_URL}/book`,values)
-        if(postBook.data?.success){
-          ToastSuccess(postBook.data?.msg)
-          navigate("/book")
-        } else{
-          ToastError(postBook.data?.msg)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-    }
+  const usePostBook = useMutation((values) => postBook(values))
+
     const formik = useFormik({
         initialValues: {
           title: '',
@@ -35,7 +30,15 @@ const Post = () => {
         },
         validationSchema: schema,
         onSubmit: values => {
-            onSubmit(values)
+            usePostBook.mutate(values,{
+              onSuccess:(res) => {
+                ToastSuccess(res?.msg)
+                navigate("/book")
+              },
+              onError:(res) => {
+                ToastError(res?.msg)
+              }
+            })
         },
     });
 

@@ -1,53 +1,20 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { BiPencil, BiTrash,BiRightArrowAlt,BiBookAlt,BiUser} from "react-icons/bi";
+import { useState } from 'react'
+// import rrd
 import {Link} from 'react-router-dom'
-
+// react-query
+import { useQuery } from 'react-query'
+// api request
+import { fetchAllBooks } from '../api';
+// import components
 import Title from '../components/TitlePage';
-import { configSwalModal, configSwalToast } from '../lib';
-import { deleteBookById} from '../api';
+import Booklist from '../components/Booklist';
 
 const book = () => {
-  const [search, setSearch] = useState('')
-  const [books, setBooks] = useState([])
-  
-  // config Swal Toast
-  const {ToastSuccess,ToastError} = configSwalToast()
+  const [search, setSearch] = useState("")
 
   // fetch all books from Database
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
-      if(res?.data?.success){
-        setBooks(res?.data?.data)
-      }
-    }).catch(err => {
-      if(axios.isCancel(err)) {
-          console.log("cancel fetch")
-      }
-    })
+  const { status, data } = useQuery("books", fetchAllBooks)
 
-    return () => {
-      source.cancel()
-    }
-  },[])
-
-  // delete book by id
-  const deleteBook = async (_id) => {
-    const Swal = await configSwalModal()
-    if (Swal.isConfirmed) {
-      const res = await deleteBookById(_id);
-        if(res?.success){
-          const filterBook = books.filter(book => book._id !== _id)
-          setBooks(filterBook)
-          ToastSuccess(res?.msg)
-        }
-        else{
-          ToastError(res?.msg)
-        }
-    }
-  }
-  
   return (
     <section className='h-[90vh] py-4'>
       <Title title='Book list' />
@@ -65,34 +32,14 @@ const book = () => {
         </div>
       </div>
 
-      <div className="relative overflow-x-auto mt-4">
-      <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2'>
-        {books.filter(book => book.title.toLowerCase().includes(search.toLocaleLowerCase())).map(book => (
-          <div className="px-6 py-4 bg-blue-900 border-4 border-softblack" key={book._id}>
-            <div className='flex gap-2 items-baseline'>
-              <span><BiBookAlt/></span>
-              <h5 className="text-xl font-bold tracking-tight text-softwhite">{book.title}</h5>
-            </div>
-            <div className='flex gap-2 items-center mb-2'>
-              <span><BiUser/></span>
-              <p className='text-sm'>{book.author}</p>
-            </div>
-            <div className='flex gap-2'>
-                <button aria-label="button delete function" className='px-3 py-2 bg-red-600 transition-all ease-in-out duration-200 hover:bg-red-700 flex items-center' onClick={() => deleteBook(book._id)}>
-                    <BiTrash />
-                </button>
-                <Link to={`/book/edit/${book._id}`} aria-label="link to go to edit page" className='px-3 py-2 bg-green-700 hover:bg-green-800 transition-all ease-in-out duration-200 flex items-center'>
-                    <BiPencil />
-                </Link>
-                <Link to={`/book/${book._id}`} className="inline-flex items-center px-4 text-xs text-center text-white bg-blue-700 hover:bg-blue-800 group">
-                    more
-                    <BiRightArrowAlt className='transition-all duration-100 group-hover:translate-x-[2px]'/>
-                </Link>
-            </div>
+      {status === 'loading' && <p className='mt-2'>Loading...</p>}
+      {status === 'error' && <p className='mt-2'>there is problem when fetching data</p>}
+      {status === 'success' && (
+        <div className="relative overflow-x-auto mt-4">
+          <Booklist data={data} search={search} />
         </div>
-        ))}
-      </div>
-      </div>
+      )}
+
     </section>
   )
 }

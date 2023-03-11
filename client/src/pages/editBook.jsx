@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import formik
 import {useFormik} from "formik";
+// import rrd
 import { useNavigate, useParams } from "react-router-dom";
+// import axios
+import axios from "axios"
+// import react-query
+import {useMutation,useQueryClient} from "react-query"
 
+// import components
 import Title from "../components/TitlePage";
+// import helper
 import { configYup,configSwalToast } from "../lib";
 import { onUpdate } from "../api";
 
 const editBook = () => {
-    const params = useParams()
-    const navigate = useNavigate()
     const [book, setBook] = useState({
       title: "",
       author: "",
@@ -17,18 +22,28 @@ const editBook = () => {
       status:'',
       information:"",
       summary:'',
-    })
+    });
+    const {id:bookId} = useParams()
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     // config Toast
     const {ToastSuccess,ToastError} = configSwalToast()
-
+    
+    // config validation yup
+    const schema = configYup()
+    // update book
+    const updateBook = useMutation(({bookId,values}) => onUpdate(bookId,values),{
+      onSuccess:() => {
+        queryClient.invalidateQueries("books")
+      }
+    })
     // get book by id
     useEffect(() => {     
       const source = axios.CancelToken.source();
-      axios.get(`${import.meta.env.VITE_BASE_URL}/book/${params.id}`,{ cancelToken: source.token})
+      axios.get(`${import.meta.env.VITE_BASE_URL}/book/${bookId}`,{ cancelToken: source.token})
       .then(res => {
           setBook({title: res.data?.data?.title, author: res.data?.data?.author, genre: res.data?.data?.genre.toString(),status:res.data?.data?.status, information: res.data?.data?.information,summary: res.data?.data?.summary})
-          return source.cancel();
       })
       .catch(err => {
           if(axios.isCancel(err)) {
@@ -39,31 +54,26 @@ const editBook = () => {
       return () => {
         source.cancel()
       }
-    },[params.id])
-    
-    // function to update book
-    const onUpdateBook = async (id,values) => {
-      const updateBook = await onUpdate(id,values)
-      if(updateBook.success){
-        ToastSuccess(updateBook?.msg)
-        navigate("/book")
-      }
-      else {
-        ToastError(updateBook?.msg)
-      }
-    }
-    // config validation yup
-    const schema = configYup()
+    },[bookId])
+
     // config formik
     const formik = useFormik({
           initialValues: book,
           enableReinitialize: true,
           validationSchema: schema,
           onSubmit: values => {
-              onUpdateBook(params.id,values)
+              updateBook.mutate({bookId,values},{
+                onSuccess:(res) => {
+                  ToastSuccess(res?.msg)
+                  navigate("/book")
+                },
+                onError:(res) => {
+                  ToastError(res?.msg)
+                }
+              })
           },
     });
-  
+
     return (
       <div className="mt-5 md:col-span-2 md:mt-0">
         <Title title="Edit book" />
