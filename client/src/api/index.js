@@ -1,27 +1,46 @@
 import axios from 'axios';
+import { configSwalModal, configSwalToast } from '../lib';
 
-export const fetchAllBooks = (setBooks) => {
-    const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_BASE_URL}/book`,{ cancelToken: source.token}).then(res => {
-        if(res?.data?.success){
-            setBooks(res?.data?.data)
-            return source.cancel()
+export const fetchAllBooks = async () => {
+    try{
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/book`)
+        if(res?.data.success){
+            return res?.data?.data
         }
-    }).catch(err => {
-        if(axios.isCancel(err)) {
-            console.log("cancel fetch")
+        else{
+            throw new Error(res?.data.msg)
         }
-    })
+    }
+    catch(error){
+        console.log("cannot fetch all books")
+    }
+}
+export const postBook = async (values) => {
+    try{
+        const post = await axios.post(`${import.meta.env.VITE_BASE_URL}/book`,values)
+        return post?.data
+    }
+    catch(error){
+        throw new Error(error)
+    }
 }
 export const deleteBookById = async (id) => {
-    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/book/${id}`)
-    if(res.data?.success){
-        return res?.data
-    }else{
-        console.error(err)
+    const {ToastSuccess,ToastError} = configSwalToast()
+    try {
+        const Swal = await configSwalModal()
+        if (Swal.isConfirmed) {
+            const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/book/${id}`)
+            if(res.data?.success){
+                ToastSuccess(res?.data.msg)
+                return res?.data
+            }else{
+                ToastError(res?.data.msg)
+            }
+        }
     }
-
-
+    catch(error){
+        console.log("cannot delete book")
+    }
 }
 
 export const onUpdate = async (id,values) => {
@@ -37,16 +56,33 @@ export const onUpdate = async (id,values) => {
     }
 }
 
-export const getBookbyId = async (id,setBook) => {
-    const source = axios.CancelToken.source();
-    axios.get(`${import.meta.env.VITE_BASE_URL}/book/${id}`,{ cancelToken: source.token})
-    .then(res => {
-        setBook({title: res.data?.data?.title, author: res.data?.data?.author, genre: res.data?.data?.genre.toString(), information: res.data?.data?.information})
-        return source.cancel();
-    })
-    .catch(err => {
-        if(axios.isCancel(err)) {
-            console.log("cancel fetch")
-        }
-    })
+export const getBookbyId = async (id) => {
+    try{
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/book/${id}`)
+        return res?.data?.data
+    }
+    catch(error){
+        throw new Error(error)
+    }
+     
+}
+
+export const loginUser = async (values) => {
+    try{
+        const user = await axios.post(`${import.meta.env.VITE_BASE_URL}/login`,values)
+        return user?.data
+    }
+    catch(err){
+        throw new Error(err)
+    }
+}
+
+export const registerUser = async (values) => {
+    try{
+        const regisUser = await axios.post(`${import.meta.env.VITE_BASE_URL}/register`,values)
+        return regisUser?.data
+    }
+    catch(err){
+        throw new Error(err)
+    }
 }
