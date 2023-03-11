@@ -65,3 +65,12 @@ export const configYup = () => {
             summary: Yup.string()
         }))
 }
+
+export const configYupAuth = () => {
+    return (
+        Yup.object().shape({
+            name: Yup.string().required('Name is required'),
+            password: Yup.string().min(6,'password should at least 6 characters').required('Password is required'),
+        })
+    )
+}
