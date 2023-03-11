@@ -1,27 +1,42 @@
+import { useFormik } from 'formik';
 import {useEffect, useState} from 'react'
-// import formik
-import { useFormik } from 'formik'
-// import rrd
 import {Link,useNavigate} from 'react-router-dom'
-// import react auth
-import {useIsAuthenticated} from 'react-auth-kit'
-// import react-query
-import {useMutation} from 'react-query'
-// import helper
-import { configYupAuth } from '../lib'
-import { registerUser } from '../api'
+import {useIsAuthenticated} from 'react-auth-kit';
+import axios from 'axios'
+import * as Yup from 'yup';
 
 
 function RegisterUser() {
-    const [errormsg,setErrormsg] = useState("")
-    const [msg,setMsg] = useState("")
     const isAuthenticated = useIsAuthenticated()
     const navigate = useNavigate();
+    const [errormsg,setErrormsg] = useState("")
+    const [msg,setMsg] = useState("")
 
-    const schema = configYupAuth()
+    const schema = Yup.object().shape({
+        name: Yup.string().required('Name is required'),
+        password: Yup.string().required('Password is required'),
+    })
 
-    const useRegisUser = useMutation((values) => registerUser(values))
+    const onSubmit = async (values) => {
+        setErrormsg("")
+        setMsg("")
 
+        try {
+            const regisUser = await axios.post(`${import.meta.env.VITE_BASE_URL}/register`,values)
+            if(regisUser.data.success){
+                setMsg(regisUser.data.msg)
+                setTimeout(()=>{
+                    navigate("/login")
+                },2000)
+            }
+            else{
+                setErrormsg(regisUser.data.msg)
+            }
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const formik = useFormik({
         initialValues: {
           name: '',
@@ -29,17 +44,7 @@ function RegisterUser() {
         },
         validationSchema: schema,
         onSubmit: values => {
-            useRegisUser.mutate(values,{
-                onSuccess:(res) => {
-                    setMsg(res.msg)
-                    setTimeout(()=>{
-                        navigate("/login")
-                    },2000)
-                },
-                onError: (res) => {
-                    setErrormsg(res.msg)
-                }
-            })
+            onSubmit(values)
         },
       });
 

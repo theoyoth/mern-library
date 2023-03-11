@@ -1,15 +1,9 @@
 import {useEffect, useState} from 'react'
-// import rrd
 import {Link,useNavigate} from 'react-router-dom'
-// import auth
 import { useSignIn,useIsAuthenticated } from 'react-auth-kit'
-// import formik
 import { useFormik } from 'formik';
-// import react-query
-import {useMutation} from 'react-query'
-// import helper
-import { loginUser } from '../api';
-import { configYupAuth } from '../lib';
+import axios from 'axios'
+import * as Yup from 'yup';
 
 function Loginpage() {
     const [errormsg,setErrormsg] = useState("")
@@ -17,10 +11,34 @@ function Loginpage() {
     const signIn = useSignIn()
     const isAuthenticated = useIsAuthenticated()
 
-    const schema = configYupAuth()
+    const schema = Yup.object().shape({
+        name: Yup.string().required('Name is required'),
+        password: Yup.string().min(6,'password should at least 6 characters').required('Password is required'),
+    })
 
-    const useLoginUser = useMutation((values) => loginUser(values))
-
+    const onSubmit = async (values) => {
+        setErrormsg("")
+        try {
+            const user = await axios.post(`${import.meta.env.VITE_BASE_URL}/login`,values)
+            if(user.data?.success){
+                const saveToken = signIn(
+                    {
+                        token: user.data.token,
+                        expiresIn:3600,
+                        tokenType: "Bearer",
+                        authState: {name:user.data.name},
+                    })
+                if(saveToken){
+                    window.location.href = "http://127.0.0.1:5173"
+                }     
+                    
+            } else{
+                setErrormsg(user.data?.msg)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const formik = useFormik({
         initialValues: {
           name: '',
@@ -28,31 +46,13 @@ function Loginpage() {
         },
         validationSchema: schema,
         onSubmit: values => {
-            useLoginUser.mutate(values,{
-                onSuccess:(user) => {
-                    setErrormsg("")
-                    const saveToken = signIn(
-                        {
-                            token: user.token,
-                            expiresIn:3600,
-                            tokenType: "Bearer",
-                            authState: {name:user.name},
-                        })
-                    if(saveToken){
-                        window.location.href = "https://booklibraryapp.vercel.app/"
-                    }    
-                },
-                onError:(res) => {
-                    setErrormsg(res?.msg)
-                }
-            })
+            onSubmit(values)
         },
     });
 
       useEffect(() => {
-        if(isAuthenticated()){
-            navigate("/")
-      }},[isAuthenticated])
+        if(isAuthenticated()) return navigate("/")
+      },[isAuthenticated])
   return (
     <section>
         <div className='w-full grid place-items-center relative'>
@@ -83,8 +83,8 @@ function Loginpage() {
                         onBlur={formik.handleBlur}
                         value={formik.values.password} className='mt-1 block w-full border-gray-200 shadow-sm text-black px-4 py-2 focus:outline-none focus:border-softblack focus:ring-4 focus:ring-softblack'
                     />
-                    {formik.errors.name && formik.touched.name && (
-                        <span className="error text-xs text-red-500">{formik.errors.name}</span>
+                    {formik.errors.password && formik.touched.password && (
+                        <span className="error text-xs text-red-500">{formik.errors.password}</span>
                     )}
                 </div>
                 <div className='mt-4'>
