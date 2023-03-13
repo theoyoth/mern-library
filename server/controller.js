@@ -32,15 +32,7 @@ export const loginUser = async (req,res) => {
                 return res.json({success:false,msg:"Invalid password"});
             }
             const token = jwt.sign({name:findUser.name},process.env.SECRET_KEY);
-            // set headers
-            res.setHeader('Access-Control-Allow-Credentials', true)
-            res.setHeader('Access-Control-Allow-Origin', '*')
-            res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-            res.setHeader(
-                'Access-Control-Allow-Headers',
-                'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-            )
-            return res.status(200).json({success:true,name:findUser.name,token});
+            res.status(200).json({success:true,name:findUser.name,token});
         }
         else{
             return res.json({success:false,msg:"User not found, please register!"});
@@ -54,6 +46,7 @@ export const loginUser = async (req,res) => {
 // controllers for book
 export const getAllBooks = async (req, res) => {
     try {
+        console.log(req.cookies)
         const books = await Book.find({})
         if(books.length > 0){
             res.status(200).json({success:true,data:books})
