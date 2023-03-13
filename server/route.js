@@ -1,5 +1,8 @@
 import express from 'express';
+// import methods from constroller
 import {getAllBooks,getBookbyId,postNewBook,updateBook,deleteBook,registerUser,loginUser} from "./controller.js"
+// import middleware
+import { middlewareAuth } from './middleware.js';
 
 const router = express.Router();
 
