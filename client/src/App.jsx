@@ -20,21 +20,21 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Layoutpage />} errorElement={<ErrorPage />}>
-        <Route index element={<RequireAuth loginPath={'login'}>
+        <Route index element={<RequireAuth loginPath={'/login'}>
         <Home />
         </RequireAuth>}/>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="book" element={<RequireAuth loginPath={'login'}>
+        <Route path="book" element={<RequireAuth loginPath={'/login'}>
         <Book />
         </RequireAuth>} />
-        <Route path="book/:id" element={<RequireAuth loginPath={'login'}>
+        <Route path="book/:id" element={<RequireAuth loginPath={'/login'}>
         <BookDetail />
         </RequireAuth>} />
-        <Route path="book/edit/:id" element={<RequireAuth loginPath={'login'}>
+        <Route path="book/edit/:id" element={<RequireAuth loginPath={'/login'}>
         <EditBook />
         </RequireAuth>} />
-        <Route path="post" element={<RequireAuth loginPath={'login'}>
+        <Route path="post" element={<RequireAuth loginPath={'/login'}>
         <Post />
         </RequireAuth>} />
       </Route>
