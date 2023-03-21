@@ -110,8 +110,8 @@ const Post = () => {
                 <select name="status" id="status" onChange={formik.handleChange}
                   onBlur={formik.handleBlur} value={formik.values.status} className="mt-1 block w-full px-4 py-2 shadow-sm bg-softwhite focus:outline-none focus:border-softblack focus:ring-4 focus:ring-softblack">
                   <option disabled></option>
-                  <option value="Di tangan">Di tangan</option>
-                  <option value="Pinjam">Pinjam</option>
+                  <option value="Di tangan">In hand</option>
+                  <option value="Pinjam">Borrow</option>
                 </select>
                 {formik.errors.status && formik.touched.status && (
                     <span className="error text-xs text-red-500">{formik.errors.status}</span>
@@ -159,7 +159,9 @@ const Post = () => {
               type="submit"
               className="inline-flex justify-center border-4 border-softblack bg-softwhite py-2 px-4 text-sm font-medium text-softblack hover:text-softwhite shadow-sm hover:bg-blue-600"
             >
-              Submit
+              {usePostBook.isLoading 
+              ? <span>Submiting...</span> 
+              : <span>Submit</span>}
             </button>
           </div>
         </div>
