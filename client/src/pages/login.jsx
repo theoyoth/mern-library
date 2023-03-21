@@ -3,7 +3,8 @@ import {Link,useNavigate} from 'react-router-dom'
 import { useSignIn,useIsAuthenticated } from 'react-auth-kit'
 import { useFormik } from 'formik';
 import axios from 'axios'
-import * as Yup from 'yup';
+// import config
+import { configYupAuth } from '../lib';
 
 function Loginpage() {
     const [errormsg,setErrormsg] = useState("")
@@ -11,10 +12,7 @@ function Loginpage() {
     const signIn = useSignIn()
     const isAuthenticated = useIsAuthenticated()
 
-    const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        password: Yup.string().min(6,'password should at least 6 characters').required('Password is required'),
-    })
+    const schema = configYupAuth()
 
     const onSubmit = async (values) => {
         setErrormsg("")
@@ -29,7 +27,7 @@ function Loginpage() {
                         authState: {name:user.data.name},
                     })
                 if(saveToken){
-                    window.location.href = "https://booklibraryapp.vercel.app/"
+                    window.location.href = "http://127.0.0.1:5173/"
                 }     
                     
             } else{
