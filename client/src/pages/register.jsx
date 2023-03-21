@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react'
 import {Link,useNavigate} from 'react-router-dom'
 import {useIsAuthenticated} from 'react-auth-kit';
 import axios from 'axios'
-import * as Yup from 'yup';
+import { configYupAuth } from '../lib';
 
 
 function RegisterUser() {
@@ -11,25 +11,26 @@ function RegisterUser() {
     const navigate = useNavigate();
     const [errormsg,setErrormsg] = useState("")
     const [msg,setMsg] = useState("")
+    const [isRegistering,setIsRegistering] = useState(false)
 
-    const schema = Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        password: Yup.string().required('Password is required'),
-    })
+    const schema = configYupAuth()
 
     const onSubmit = async (values) => {
         setErrormsg("")
         setMsg("")
 
         try {
+            setIsRegistering(true)
             const regisUser = await axios.post(`${import.meta.env.VITE_BASE_URL}/register`,values)
             if(regisUser.data.success){
                 setMsg(regisUser.data.msg)
                 setTimeout(()=>{
                     navigate("/login")
                 },2000)
+                setIsRegistering(false)
             }
             else{
+                setIsRegistering(false)
                 setErrormsg(regisUser.data.msg)
             }
             
@@ -92,7 +93,11 @@ function RegisterUser() {
                 }
                 
                 <div className='flex justify-between items-end'>
-                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>Register</button>
+                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>
+                    {isRegistering
+                    ? <span>Registering...</span> 
+                    : <span>Register</span>}
+                    </button>
                     <Link to='/login' className='border-b-4 border-softwhite hover:border-softblack'>Login</Link>
                 </div>
             </form>

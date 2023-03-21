@@ -8,6 +8,7 @@ import { configYupAuth } from '../lib';
 
 function Loginpage() {
     const [errormsg,setErrormsg] = useState("")
+    const [isLogin, setIsLogin] = useState(false)
     const navigate = useNavigate()
     const signIn = useSignIn()
     const isAuthenticated = useIsAuthenticated()
@@ -17,6 +18,7 @@ function Loginpage() {
     const onSubmit = async (values) => {
         setErrormsg("")
         try {
+            setIsLogin(true)
             const user = await axios.post(`${import.meta.env.VITE_BASE_URL}/login`,values)
             if(user.data?.success){
                 const saveToken = signIn(
@@ -26,11 +28,12 @@ function Loginpage() {
                         tokenType: "Bearer",
                         authState: {name:user.data.name},
                     })
+                setIsLogin(false)
                 if(saveToken){
                     window.location.href = "http://127.0.0.1:5173/"
                 }     
-                    
             } else{
+                setIsLogin(false)
                 setErrormsg(user.data?.msg)
             }
         } catch (error) {
@@ -86,10 +89,14 @@ function Loginpage() {
                     )}
                 </div>
                 <div className='mt-4'>
-                    <p className='text-red-600'>{errormsg}</p>
+                    <p className='text-xs text-red-600'>{errormsg}</p>
                 </div>
                 <div className='flex justify-between items-end'>
-                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>Login</button>
+                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>
+                    {isLogin 
+                    ? <span>login...</span> 
+                    : <span>Login</span>}
+                    </button>
                     <Link to='/register' className='border-b-4 border-softwhite hover:border-softblack'>Register</Link>
                 </div>
             </form>
