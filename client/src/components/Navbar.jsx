@@ -1,5 +1,9 @@
-import {NavLink, useNavigate} from 'react-router-dom'
+// import rrd
+import { NavLink, useNavigate } from 'react-router-dom'
+// import react auth
 import { useSignOut } from 'react-auth-kit'
+// import icon
+import { BiLogOut } from 'react-icons/bi'
 
 
 const Navbar = () => {
@@ -20,7 +24,7 @@ const Navbar = () => {
               <NavLink to="/book">Book</NavLink>
             </li>
         </ul>
-        <button onClick={() => logout()} className='px-4 bg-softwhite hover:bg-red-700 text-softblack hover:text-softwhite border-4 border-softblack transition-all duration-200 ease-in-out'>Logout</button>
+        <button onClick={() => logout()} className='px-4 py-[2px] bg-softwhite hover:bg-red-700 text-softblack hover:text-softwhite border-4 border-softblack transition-all duration-200 ease-in-out flex items-center gap-[4px]'><BiLogOut /><span className='hidden md:block'>Logout</span></button>
     </nav>
   )
 }
