@@ -18,7 +18,7 @@ const Booklist = ({data,search}) => {
     })
 
   return (
-    <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2'>
+    <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
         {data.filter(bookData => bookData.title.toLowerCase().includes(search.toLowerCase())).map(book => (
           <div className="px-6 py-4 bg-blue-900 border-4 border-softblack" key={book._id}>
             <div className='flex gap-2 items-baseline'>
