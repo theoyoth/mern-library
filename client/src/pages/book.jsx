@@ -34,11 +34,15 @@ const book = () => {
 
       {status === 'loading' && <p className='mt-2'>Loading...</p>}
       {status === 'error' && <p className='mt-2'>there is problem when fetching data</p>}
-      {status === 'success' && (
-        <div className="relative overflow-x-auto mt-4">
-          <Booklist data={data} search={search} />
-        </div>
-      )}
+      {
+        status === 'success' && data?.length > 0 ? (
+          <div className="relative overflow-x-auto mt-4">
+            <Booklist data={data} search={search} />
+          </div>
+        ) : (
+          <p className='mt-4 text-xl'>There is no book</p>
+        )
+      } 
 
     </section>
   )

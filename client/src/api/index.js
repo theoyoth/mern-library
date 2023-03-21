@@ -12,7 +12,7 @@ export const fetchAllBooks = async () => {
         }
     }
     catch(error){
-        console.log("cannot fetch all books")
+        return
     }
 }
 export const postBook = async (values) => {
