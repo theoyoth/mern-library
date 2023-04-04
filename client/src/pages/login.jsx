@@ -38,6 +38,7 @@ function Loginpage() {
             }
         } catch (error) {
             console.log(error)
+            setIsLogin(false)
         }
     }
     const formik = useFormik({
@@ -92,7 +93,7 @@ function Loginpage() {
                     <p className='text-xs text-red-600'>{errormsg}</p>
                 </div>
                 <div className='flex justify-between items-end'>
-                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>
+                    <button type="submit" className={`mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px] ${isLogin ? 'opacity-50' : 'opacity-100'}`} disabled={isLogin}>
                     {isLogin 
                     ? <span>login...</span> 
                     : <span>Login</span>}

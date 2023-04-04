@@ -35,6 +35,7 @@ function RegisterUser() {
             }
             
         } catch (error) {
+            setIsRegistering(false)
             console.log(error)
         }
     }
@@ -93,7 +94,7 @@ function RegisterUser() {
                 }
                 
                 <div className='flex justify-between items-end'>
-                    <button type="submit" className='mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px]'>
+                    <button type="submit" className={`mt-4 bg-softwhite hover:bg-blue-600 border-4 border-[#1a1a1a] text-softblack hover:text-softwhite transition-all ease-in-out duration-200 px-8 py-[2px] ${isRegistering ? 'opacity-50' : 'opacity-100'}`} disabled={isRegistering}>
                     {isRegistering
                     ? <span>Registering...</span> 
                     : <span>Register</span>}

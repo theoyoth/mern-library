@@ -157,7 +157,8 @@ const Post = () => {
           <div className="px-4 py-3 text-right sm:px-6">
             <button
               type="submit"
-              className="inline-flex justify-center border-4 border-softblack bg-softwhite py-2 px-4 text-sm font-medium text-softblack hover:text-softwhite shadow-sm hover:bg-blue-600"
+              className={`inline-flex justify-center border-4 border-softblack bg-softwhite py-2 px-4 text-sm font-medium text-softblack hover:text-softwhite shadow-sm hover:bg-blue-600 ${usePostBook.isLoading ? "opacity-50" : "opacity-100"}`}
+              disabled={usePostBook.isLoading}
             >
               {usePostBook.isLoading 
               ? <span>Submiting...</span> 
